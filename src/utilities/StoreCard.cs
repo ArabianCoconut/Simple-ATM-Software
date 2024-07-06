@@ -1,5 +1,6 @@
 using System.Data.SQLite;
 using System.Data.SqlTypes;
+using Microsoft.VisualBasic;
 namespace StoreCard
 {
     public class SQLShit
@@ -10,30 +11,34 @@ namespace StoreCard
         {
             return "Query executed successfully";
         }
+        internal SQLiteConnection DBconnection()
+        {
+            string DbName = "creditcard.db";
+            string ConnectionString = $"Data Source={DbName};Version=3;";
+            var connection = new SQLiteConnection(ConnectionString);
+            connection.Open();
+            return connection;
+        }
+        internal SQLiteCommand DBcommand()
+        {
+            var command = DBconnection();
+            return command.CreateCommand();
+        }
 
         internal void SQLiteCreateTable(){
-            string DbName = "creditcard.db";
             try
             {
-                string connectionString = $"Data Source={DbName};Version=3;";
-                using var connection = new SQLiteConnection(connectionString);
-                connection.Open();
-                using var command = new SQLiteCommand(connection);
-                command.CommandText = "CREATE TABLE CreditCardDetails (Id INTEGER PRIMARY KEY, CardholderName TEXT, CardNumber TEXT, ExpiryDate TEXT, CVV TEXT)";
+                var command = DBcommand();
+                command.CommandText = "CREATE TABLE IF NOT EXISTS CreditCardDetails (CardholderName TEXT, CardNumber TEXT, ExpiryDate TEXT, CVV TEXT);";
                 command.ExecuteNonQuery();
                 command.Dispose();
-                connection.Close();
             }
             catch (System.Data.SQLite.SQLiteException)
             {
-                string connectionString = $"Data Source={DbName};Version=3;";
-                using var connection = new SQLiteConnection(connectionString);
-                connection.Open();
-                using var command = new SQLiteCommand(connection);
+                var command = DBcommand();
                 command.CommandText = "DROP TABLE IF EXISTS CreditCardDetails;";
                 command.ExecuteNonQuery();
                 command.Dispose();
-                connection.Close();
             }
         }
         public void InsertData(string cardholderName, string cardNumber, string expiryDate, string cvv)
@@ -41,10 +46,7 @@ namespace StoreCard
             SQLiteCreateTable();
             string[] value_parameter = { cardholderName, cardNumber, expiryDate, cvv };
             string[] parameter_name = { "@CardholderName", "@CardNumber", "@ExpiryDate", "@CVV"};
-            string connectionString = $"Data Source=creditcard.db;Version=3;";
-            using var connection = new SQLiteConnection(connectionString);
-            connection.Open();
-            using var command = new SQLiteCommand(connection);
+            var command = DBcommand();
             command.CommandText = "INSERT INTO CreditCardDetails (CardholderName, CardNumber, ExpiryDate, CVV) VALUES (@CardholderName, @CardNumber, @ExpiryDate, @CVV)";
             for (int i = 0, j = 0; i < value_parameter.Length && j < parameter_name.Length; i++, j++)
             {
@@ -52,7 +54,6 @@ namespace StoreCard
             }
             command.ExecuteNonQuery();
             command.Dispose();
-            connection.Close();
         }
 
 
