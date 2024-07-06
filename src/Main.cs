@@ -1,6 +1,7 @@
 ﻿using System;
 using DebitCard;
 using AtmFunctions;
+using StoreCard;
 
 namespace MainProgram{
     public class MainProgram{
@@ -16,7 +17,7 @@ namespace MainProgram{
                 ExpiryDate = "12/25",
                 CVV = new Random().Next(100, 999).ToString()
             };
-            string UserCardInformation = "Card details saved successfully \n" +
+            string UserCardInformation = "Card details generated successfully \n" +
                                   $"Card Number: {genCard.CardNumber}\n" +
                                   $"Card Holder Name: {genCard.CardHolderName}\n" +
                                   $"Expiry Date: {genCard.ExpiryDate}\n" +
@@ -24,21 +25,23 @@ namespace MainProgram{
                                   
             Console.WriteLine($"Welcome {getUserLogin} to ATM Machine \n"+
                                 "Please press \"Enter Key\" your card details to proceed or type 'gen' to generate a card \n");
+            Console.Write("Input:");
             string? userInput = Console.ReadLine();
             
             if (userInput is "gen")
             {
+                var sqlShit = new SQLShit();
                 Console.WriteLine("Generating a card for you...");
                 Thread.Sleep(2000);
                 Console.WriteLine(UserCardInformation);
-                Thread.Sleep(2000);
+                sqlShit.InsertData(genCard.CardHolderName, genCard.CardNumber, genCard.ExpiryDate, genCard.CVV);
                 AtmOptions();
-
             }
             else
             {
                 try
                 {
+                    var sqlShit = new SQLShit();
                     string? cardNumber, cardHolderName, expiryDate, cvv;
                     ManualData(out cardNumber, out cardHolderName, out expiryDate, out cvv);
                     var CardInfo = new DebitCard.DebitCard
@@ -54,8 +57,11 @@ namespace MainProgram{
                                       $"Card Holder Name: {CardInfo.CardHolderName}\n" +
                                       $"Expiry Date: {CardInfo.ExpiryDate}\n" +
                                       $"CVV: {CardInfo.CVV}");
-                    
-                    Thread.Sleep(2000);
+                    sqlShit.InsertData(CardInfo.CardHolderName ?? string.Empty,
+                                        CardInfo.CardNumber ?? string.Empty,
+                                        CardInfo.ExpiryDate ?? string.Empty,
+                                        CardInfo.CVV ?? string.Empty);
+
                     AtmOptions();
                 }
                 catch (Exception ex)

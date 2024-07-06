@@ -21,14 +21,15 @@ namespace AtmFunctions
                               "3. Deposit Cash \n" +
                               "4. Transfer Funds \n" +
                               "5. Exit \n");
+            Console.Write("\nInput:");
             string? userOption = Console.ReadLine();
             switch (userOption)
             {
                 case "1":
-                    Console.WriteLine($"Your balance is Rs {Balance}\n");
+                    Console.WriteLine($"\nYour balance is Rs {Balance}\n");
                     break;
                 case "2":
-                    Console.WriteLine("Please enter the amount you want to withdraw\n");
+                    Console.Write("Please enter the amount you want to withdraw:");
                     string? withdrawAmount = Console.ReadLine();
                     if (int.TryParse(withdrawAmount, out int outBalance))
                     {
@@ -45,7 +46,7 @@ namespace AtmFunctions
                     }
                     break;
                 case "3":
-                    Console.WriteLine("Please enter the amount you want to deposit\n");
+                    Console.Write("Please enter the amount you want to deposit:");
                     string? depositAmount = Console.ReadLine();
                     if (int.TryParse(depositAmount, out int deposit))
                     {
@@ -78,7 +79,9 @@ namespace AtmFunctions
                     }
                     break;
                 case "5":
-                    Console.WriteLine("Thank you for using our ATM");
+                    Console.WriteLine("Thank you for using our ATM exiting in a moment..\n");
+                    Thread.Sleep(2000);
+                    Environment.Exit(0);
                     break;
                 default:
                     Console.WriteLine("Invalid option selected");
