@@ -1,5 +1,4 @@
 using System.Data.SQLite;
-using System.Net.NetworkInformation;
 namespace StoreCard
 {
     public class SQLShit
