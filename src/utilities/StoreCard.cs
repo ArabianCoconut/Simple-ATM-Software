@@ -1,17 +1,10 @@
 using System.Data.SQLite;
-using System.Data.SqlTypes;
-using Microsoft.VisualBasic;
+using System.Net.NetworkInformation;
 namespace StoreCard
 {
     public class SQLShit
     {
-        public string? ConnectionString { get; set; }
-        public string? Query { get; set; }
-        public string ExecuteQuery()
-        {
-            return "Query executed successfully";
-        }
-        internal SQLiteConnection DBconnection()
+        public SQLiteConnection DBconnection()
         {
             string DbName = "creditcard.db";
             string ConnectionString = $"Data Source={DbName};Version=3;";
@@ -19,17 +12,17 @@ namespace StoreCard
             connection.Open();
             return connection;
         }
-        internal SQLiteCommand DBcommand()
+        public SQLiteCommand DBcommand()
         {
             var command = DBconnection();
             return command.CreateCommand();
         }
 
-        internal void SQLiteCreateTable(){
+        public void SQLiteCreateTable(){
             try
             {
                 var command = DBcommand();
-                command.CommandText = "CREATE TABLE IF NOT EXISTS CreditCardDetails (CardholderName TEXT, CardNumber TEXT, ExpiryDate TEXT, CVV TEXT);";
+                command.CommandText = "CREATE TABLE IF NOT EXISTS CreditCardDetails (CardholderName TEXT, CardNumber TEXT, Pin TEXT, ExpiryDate TEXT, CVV TEXT);";
                 command.ExecuteNonQuery();
                 command.Dispose();
             }
@@ -41,16 +34,16 @@ namespace StoreCard
                 command.Dispose();
             }
         }
-        public void InsertData(string cardholderName, string cardNumber, string expiryDate, string cvv)
+        public void InsertData(string cardholderName, string cardNumber, string Pin, string expiryDate, string cvv)
         {
             SQLiteCreateTable();
-            string[] value_parameter = { cardholderName, cardNumber, expiryDate, cvv };
-            string[] parameter_name = { "@CardholderName", "@CardNumber", "@ExpiryDate", "@CVV"};
+            string[] value_parameter = {cardholderName, cardNumber, Pin, expiryDate, cvv};
+            string[] parameter_name = {"@CardholderName", "@CardNumber","@Pin" ,"@ExpiryDate", "@CVV"};
             var command = DBcommand();
-            command.CommandText = "INSERT INTO CreditCardDetails (CardholderName, CardNumber, ExpiryDate, CVV) VALUES (@CardholderName, @CardNumber, @ExpiryDate, @CVV)";
-            for (int i = 0, j = 0; i < value_parameter.Length && j < parameter_name.Length; i++, j++)
+            command.CommandText = "INSERT INTO CreditCardDetails (CardholderName, CardNumber, Pin, ExpiryDate, CVV) VALUES (@CardholderName, @CardNumber, @Pin, @ExpiryDate, @CVV);";
+            for (int i = 0; i < value_parameter.Length; i++)
             {
-                command.Parameters.Add(new SQLiteParameter(parameter_name[j], value_parameter[i]));
+                command.Parameters.Add(new SQLiteParameter(parameter_name[i], value_parameter[i]));
             }
             command.ExecuteNonQuery();
             command.Dispose();

@@ -1,17 +1,17 @@
 namespace AtmFunctions
 {
-    public class AtmOptions{
+    public class BankAccount{
         private int _balance = 1000;
         public int Balance { get => _balance; set => _balance = Balance; }
 
     }
 
-    public class RunFunctions{
+    public class RunAtmFunction{
 
         public static void RunATM(){
             string ProceedMessage = "\nNow that you have your card details, you can proceed to the ATM Machine \n"+
                                     "Please press \"Enter Key\" to proceed.\n";
-            int Balance = new AtmOptions().Balance;
+            int Balance = new BankAccount().Balance;
             Console.WriteLine(ProceedMessage);
             Console.ReadLine();
             while(true){
