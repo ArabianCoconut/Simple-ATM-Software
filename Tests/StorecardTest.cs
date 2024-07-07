@@ -2,7 +2,6 @@ using NUnit.Framework;
 using StoreCard;
 namespace Tests;
 
-
 public class Tests  : SQLShit
 {
     [Test]
