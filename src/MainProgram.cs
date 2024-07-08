@@ -3,7 +3,6 @@ using StoreCard;
 
 namespace MainProgram{
     public class MainProgram{
-
         public static void Main(string[] args)
         {
             string getUserLogin = Environment.UserName.ToUpper();
@@ -23,6 +22,7 @@ namespace MainProgram{
                                     $"Expiry Date: {genCard.ExpiryDate}\n" +
                                     $"CVV: {genCard.CVV}";
                                   
+            Console.Title = "ATM Machine Simulation";
             Console.WriteLine($"Welcome {getUserLogin} to ATM Machine \n"+
                                 "Please press \"Enter Key\" your card details to proceed or type 'gen' to generate a card \n");
             Console.Write("Input:");
@@ -76,15 +76,15 @@ namespace MainProgram{
 
             static void ManualData(out string? cardNumber, out string? cardHolderName, out string? expiryDate, out string? cvv, out string? pin)
             {
-                Console.WriteLine("Please enter your card number");
+                Console.Write("Please enter your card number:");
                 cardNumber = Console.ReadLine();
-                Console.WriteLine("Please enter your card pin");
+                Console.Write("Please enter your card pin:");
                 pin = Console.ReadLine();
-                Console.WriteLine("Please enter your card holder name");
+                Console.Write("Please enter your card holder name:");
                 cardHolderName = Console.ReadLine();
-                Console.WriteLine("Please enter your card expiry date");
+                Console.Write("Please enter your card expiry date:");
                 expiryDate = Console.ReadLine();
-                Console.WriteLine("Please enter your card CVV");
+                Console.Write("Please enter your card CVV:");
                 cvv = Console.ReadLine();
             }
         }
