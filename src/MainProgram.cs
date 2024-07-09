@@ -1,4 +1,5 @@
 ﻿using AtmFunctions;
+using DebitCard;
 using StoreCard;
 
 namespace MainProgram{
@@ -6,15 +7,8 @@ namespace MainProgram{
         public static void Main(string[] args)
         {
             string getUserLogin = Environment.UserName.ToUpper();
-
-            DebitCard.DebitCard genCard = new DebitCard.DebitCard
-            {
-                CardNumber = new Random().Next(100000000, 999999999).ToString(),
-                CardHolderName = getUserLogin,
-                ExpiryDate = "12/25",
-                CVV = new Random().Next(100, 999).ToString(),
-                PIN = new Random().Next(1000, 9999).ToString()
-            };
+            var _SQL = new SQLDatabase();
+            var genCard = new CardDetails();
             string UserCardInformation = "Card details generated successfully \n" +
                                     $"Card Holder Name: {genCard.CardHolderName}\n" +
                                     $"Card Number: {genCard.CardNumber}\n" +
@@ -30,21 +24,24 @@ namespace MainProgram{
             
             if (userInput is "gen")
             {
-                var sqlShit = new SQLShit();
+                genCard = new CardDetails();
                 Console.WriteLine("Generating a card for you...");
                 Thread.Sleep(2000);
                 Console.WriteLine(UserCardInformation);
-                sqlShit.InsertData(genCard.CardHolderName, genCard.CardNumber,genCard.PIN, genCard.ExpiryDate, genCard.CVV);
+                _SQL.InsertData(genCard.CardHolderName ?? string.Empty, 
+                                genCard.CardNumber ?? string.Empty,
+                                genCard.PIN ?? string.Empty , 
+                                genCard.ExpiryDate ?? string.Empty, 
+                                genCard.CVV ?? string.Empty);
                 AtmOptions();
             }
             else
             {
                 try
                 {
-                    var sqlShit = new SQLShit();
                     string? cardNumber, cardHolderName, expiryDate, cvv, pin;
                     ManualData(out cardNumber, out cardHolderName, out expiryDate, out cvv, out pin);
-                    var CardInfo = new DebitCard.DebitCard
+                    var CardInfo = new CardDetails
                     {
                         CardHolderName = cardHolderName?.Length < 3 ? throw new Exception("Card holder name must be at least 3 characters long") : cardHolderName,
                         CardNumber = cardNumber?.Length < 5 ? throw new Exception("Card number must be at least 5 characters long") : cardNumber,
@@ -59,7 +56,7 @@ namespace MainProgram{
                                       $"PIN: {CardInfo.PIN}\n" +
                                       $"Expiry Date: {CardInfo.ExpiryDate}\n" +
                                       $"CVV: {CardInfo.CVV}");
-                    sqlShit.InsertData(CardInfo.CardHolderName ?? string.Empty,
+                    _SQL.InsertData(CardInfo.CardHolderName ?? string.Empty,
                                         CardInfo.CardNumber ?? string.Empty,
                                         CardInfo.ExpiryDate ?? string.Empty,
                                         CardInfo.CVV ?? string.Empty,

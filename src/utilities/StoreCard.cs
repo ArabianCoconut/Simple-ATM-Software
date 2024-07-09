@@ -1,7 +1,10 @@
 using System.Data.SQLite;
 namespace StoreCard
 {
-    public class SQLShit
+    public class SQLDatabase
+    /// <summary>
+    /// This class is used to store card details in a SQLite database
+    /// </summary>
     {
         public SQLiteConnection DBconnection()
         {

@@ -1,11 +1,20 @@
 namespace DebitCard
 {
-    public class DebitCard
-    {
-        public string? CardNumber { get; set; }
-        public string? CardHolderName { get; set; }
-        public string? ExpiryDate { get; set; }
-        public string? CVV { get; set; }
-        public string? PIN { get; set; }
-    }
+     struct CardDetails
+        {
+            public string? CardNumber;
+            public string? CardHolderName;
+            public string? ExpiryDate;
+            public string? CVV;
+            public string? PIN;
+
+            public CardDetails()
+            {
+                CardNumber = new Random().Next(100000000, 999999999).ToString();
+                CardHolderName = "John Doe";
+                ExpiryDate = "12/25";
+                CVV = new Random().Next(100, 999).ToString();
+                PIN = new Random().Next(1000, 9999).ToString();
+            }
+        }
 }
