@@ -2,9 +2,12 @@
 using DebitCard;
 using StoreCard;
 
-namespace MainProgram{
-    public class MainProgram{
+namespace MainProgram
+{
+    public class MainProgram
+    {
         public static void Main(string[] args)
+        /* This method is responsible for running the ATM */
         {
             string getUserLogin = Environment.UserName.ToUpper();
             var _SQL = new SQLDatabase();
@@ -15,23 +18,24 @@ namespace MainProgram{
                                     $"PIN: {genCard.PIN}\n" +
                                     $"Expiry Date: {genCard.ExpiryDate}\n" +
                                     $"CVV: {genCard.CVV}";
-                                  
+
             Console.Title = "ATM Machine Simulation";
-            Console.WriteLine($"Welcome {getUserLogin} to ATM Machine \n"+
+            Console.WriteLine($"Welcome {getUserLogin} to ATM Machine \n" +
                                 "Please press \"Enter Key\" your card details to proceed or type 'gen' to generate a card \n");
             Console.Write("Input:");
             string? userInput = Console.ReadLine();
-            
+
             if (userInput is "gen")
             {
                 genCard = new CardDetails();
                 Console.WriteLine("Generating a card for you...");
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
                 Console.WriteLine(UserCardInformation);
-                _SQL.InsertData(genCard.CardHolderName ?? string.Empty, 
+
+                _SQL.InsertData(genCard.CardHolderName ?? string.Empty,
                                 genCard.CardNumber ?? string.Empty,
-                                genCard.PIN ?? string.Empty , 
-                                genCard.ExpiryDate ?? string.Empty, 
+                                genCard.PIN ?? string.Empty,
+                                genCard.ExpiryDate ?? string.Empty,
                                 genCard.CVV ?? string.Empty);
                 AtmOptions();
             }
@@ -49,13 +53,14 @@ namespace MainProgram{
                         CVV = cvv?.Length < 3 ? throw new Exception("CVV must be at least 3 characters long") : cvv,
                         PIN = pin?.Length < 4 ? throw new Exception("PIN must be at least 4 characters long") : pin
                     };
-                    
+
                     Console.WriteLine("Card details saved successfully \n" +
                                       $"Card Number: {CardInfo.CardNumber}\n" +
                                       $"Card Holder Name: {CardInfo.CardHolderName}\n" +
                                       $"PIN: {CardInfo.PIN}\n" +
                                       $"Expiry Date: {CardInfo.ExpiryDate}\n" +
                                       $"CVV: {CardInfo.CVV}");
+                    
                     _SQL.InsertData(CardInfo.CardHolderName ?? string.Empty,
                                         CardInfo.CardNumber ?? string.Empty,
                                         CardInfo.ExpiryDate ?? string.Empty,
@@ -87,6 +92,7 @@ namespace MainProgram{
         }
 
         public static void AtmOptions()
+        /* This method is used to display the ATM options */
         {
             RunAtmFunction.RunATM();
         }
